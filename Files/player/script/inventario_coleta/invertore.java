@@ -41,7 +41,8 @@ public class invertore extends Component {
   }
 
   private void laser() {
-    LaserHit hit = new Laser().trace(myObject.findChildObject("vision").getGlobalPosition(), myObject.findChildObject("vision").forward(), 6f);
+      SpatialObject camera = WorldController.findObject("vision");
+    LaserHit hit = new Laser().trace(camera.globalPosition, camera.forward(), 6f);
     if (hit == null || !"object".equals(hit.getObject().tag)) {
       onoff = false;
       infor.setText("");
