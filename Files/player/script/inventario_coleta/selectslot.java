@@ -3,7 +3,7 @@ public class selectslot extends Component {
   private List<Key> keys = new ArrayList<Key>();
   private SUIImage[] slot = new SUIImage[30];
   private SUIText name;
-  private SpatialObject paineldados;
+  private SpatialObject paineldados, player;
   private int select = -1, trocaslot = -1;
   private invertore invent;
   private float clicktime = 0;
@@ -18,11 +18,13 @@ public class selectslot extends Component {
     Black = new Color(0, 0, 0);
     Transparent = new Color(0, 0, 0, 0);
     BlueWhite = new Color(0, 255, 255);
+    
+    player = WorldController.findObject("player");
     Object = WorldController.findObject("object");
     paineldados = WorldController.findObject("information");
     name = paineldados.findComponent("suitext");
     invent = myObject.findComponent("invertore");
-    OpenExit = myObject.findComponent("onoffinvent");
+    OpenExit = player.findComponent("onoffinvent");
     addslot();
     name.setText("");
     paineldados.setEnabled(false);
