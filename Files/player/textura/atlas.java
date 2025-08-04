@@ -5,7 +5,10 @@ public class atlas extends Component {
   public int altura = 21, largura = 21;
   public SUIImage texture;
 
-  
+  void start() {
+    texture = myObject.findComponent("suiimage");
+  } 
+
   void repeat() {
     texture.setImage(getSpait());
   }
