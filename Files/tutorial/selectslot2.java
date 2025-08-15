@@ -7,16 +7,16 @@ public class selectslot2 extends Component {
   private invent invent;
   private float timeclick = 0;
   private SUIText Name;
-  // public ObjectFile Obj;
+  public ObjectFile OBJ;
   private SpatialObject painel, Hand;
-  private Color black, blue, Transparet,white;
+  private Color black, blue, Transparet, white;
   private onoffinvent OffInvent;
 
   void start() {
-     black = new Color(0, 0, 0);
-     Transparet = new Color(0, 0, 0, 0);
-     blue =new Color(255,0,0); 
-     white = new Color();
+    black = new Color(0, 0, 0);
+    Transparet = new Color(0, 0, 0, 0);
+    blue = new Color(255, 0, 0);
+    white = new Color();
     OffInvent = myObject.findComponent("onoffinvent");
     Hand = WorldController.findObject("object");
     painel = WorldController.findObject("information");
@@ -42,15 +42,15 @@ public class selectslot2 extends Component {
     if (timeclick <= 1) timeclick += 0.01f;
     seleciona();
     UpSlot();
-    if(Input.isKeyDown("invent") || Input.keyboard.isKeyDown("r")){
-        if(select > 4) select =-1;
-        painel.setEnabled(false);
+    if (Input.isKeyDown("invent") || Input.keyboard.isKeyDown("r")) {
+      if (select > 4) select = -1;
+      painel.setEnabled(false);
     }
-    
-    if(!OffInvent.onoff && TrocaSlot != -1){
-        painel.setEnabled(false);
-        TrocaSlot =-1;
-        select = -1;
+
+    if (!OffInvent.onoff && TrocaSlot != -1) {
+      painel.setEnabled(false);
+      TrocaSlot = -1;
+      select = -1;
     }
   }
 
@@ -58,15 +58,15 @@ public class selectslot2 extends Component {
     for (int i = 0; i < key.length; i++) {
       if (key[i].isDown()) {
         if (select == i) {
-            OffObject("",false,i);
+          OffObject("", false, i);
           select = -1;
           onoffSelect(-1);
         } else {
           if (invent.items.get(i) != null && invent.items.get(i).name != null) {
             item2 dados = invent.items.get(i);
             String txt = "\n name: " + dados.name + "\n " + dados.type + ": " + dados.value;
-            OffObject(txt,true,i);
-          }else OffObject("",false,i);
+            OffObject(txt, true, i);
+          } else OffObject("", false, i);
           select = i;
         }
         break;
@@ -76,14 +76,14 @@ public class selectslot2 extends Component {
 
   private void OffObject(String value, boolean onoff, int i) {
     Name.setText(value);
-    if(OffInvent.onoff) painel.setEnabled(onoff);
+    if (OffInvent.onoff) painel.setEnabled(onoff);
     boolean activeinvent = i >= 0 && i < 5;
     Hand.setEnabled(onoff && activeinvent);
     if (Hand.findComponent("ModelRenderer") == null) Hand.addComponent(new ModelRenderer());
     ModelRenderer itemHand = Hand.findComponent("ModelRenderer");
     if (itemHand == null || invent.items.get(i) == null) return;
     itemHand.setModelFile(invent.items.get(i).Vertex);
-  } 
+  }
 
   private void UpSlot() {
     for (int i = 0; i < key.length; i++) {
@@ -122,7 +122,7 @@ public class selectslot2 extends Component {
         }
         break;
       }
-      if(Input.isKeyDown("remove") && select == i) RemoveItem(i);
+      if (Input.isKeyDown("remove") && select == i) RemoveItem(i);
       if (spait[i] == null) continue;
       if (TrocaSlot == i) spait[i].setColor(blue);
       else spait[i].setColor(select == i ? black : white);
@@ -150,15 +150,25 @@ public class selectslot2 extends Component {
       invent.cont[i].setText(WhatValue > 0 ? String.valueOf(WhatValue) : "");
     }
   }
-  private void RemoveItem(int i){
-      invent.items.set(i, null);
-      invent.value[i] = 0;
-      if(invent.spait[i] != null){
-          invent.spait[i].setImage(null);
-          invent.spait[i].setColor(Transparet);
-      }
-      if(invent.cont[i] != null) invent.cont[i].setText("");
-      onoffSelect(-1);
-      OffObject("",false,i);
+
+  private void RemoveItem(int i) {
+      RemoveSlot(i);
+    invent.items.set(i, null);
+    invent.value[i] = 0;
+    if (invent.spait[i] != null) {
+      invent.spait[i].setImage(null);
+      invent.spait[i].setColor(Transparet);
+    }
+    if (invent.cont[i] != null) invent.cont[i].setText("");
+    onoffSelect(-1);
+    OffObject("", false, i);
   }
+
+  private void RemoveSlot(int i) {
+    removeItemSlot remove = new removeItemSlot();
+    item2 rmItem = invent.items.get(i);
+    int quant = invent.value[i];
+    if (rmItem == null || quant <= 0) return;
+    remove.caractItems(rmItem , quant, Hand, OBJ);
+  } 
 }
