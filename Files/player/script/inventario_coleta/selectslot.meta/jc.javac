@@ -129,7 +129,7 @@ public class selectslot extends Component {
                 invent.cont[trocaslot].setText(invent.slotAlmout[trocaslot] > 0 ? String.valueOf(invent.slotAlmout[trocaslot]) : "");
                 if (invent.slotAlmout[trocaslot] <= 0) {
                   invent.items.set(trocaslot, null);
-                  invent.spait[trocaslot].setImage(null);
+                  invent.spait[trocaslot].setImage(Texture.empty());
                   invent.spait[trocaslot].setColor(Transparent);
                   invent.cont[trocaslot].setText("");
                 }
@@ -166,7 +166,7 @@ public class selectslot extends Component {
     invent.items.set(i, seleslot);
     //// troca ui e color
     if (invent.spait[i] != null) {
-      invent.spait[i].setImage(seleslot != null && seleslot.ui != null ? seleslot.getSpait() : null);
+      invent.spait[i].setImage(seleslot != null && seleslot.ui != null ? seleslot.getSpait() : Texture.empty());
       invent.spait[i].setColor(seleslot != null ? new Color() : new Color(0, 0, 0, 0));
     }
     ////
