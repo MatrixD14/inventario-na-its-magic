@@ -23,7 +23,7 @@ public class item extends Component {
     this.maxgrup = maxgrup;
     this.MapSpriteX = MapSpriteX;
     this.MapSpriteY = MapSpriteY;
-    this.Spait = getSpait();
+    //this.Spait = getSpait();
     this.logica = logica;
   }
 
