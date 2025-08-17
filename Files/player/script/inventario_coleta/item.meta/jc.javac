@@ -4,7 +4,7 @@ public class item extends Component {
   public Texture ui;
   private Texture Spait;
   public VertexFile vertex;
-  public int value, QuatItemGrup, maxgrup;
+  public int value, QuatItemGrup, maxgrup, id;
   public int MapSpriteX, MapSpriteY;
   private int altura = 32, largura = 32;
   public atributo logica;
@@ -12,9 +12,10 @@ public class item extends Component {
     super();
   }
 
-  public item(String name, String typeDC, Texture ui, VertexFile vertex, int value, int QuatItemGrup, int maxgrup, int MapSpriteX, int MapSpriteY, atributo logica) {
+  public item(String name, int id, String typeDC, Texture ui, VertexFile vertex, int value, int QuatItemGrup, int maxgrup, int MapSpriteX, int MapSpriteY, atributo logica) {
     super();
     this.name = name;
+    this.id = id;
     this.typeDC = typeDC;
     this.ui = ui;
     this.vertex = vertex;
