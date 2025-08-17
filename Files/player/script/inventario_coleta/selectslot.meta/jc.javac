@@ -12,13 +12,15 @@ public class selectslot extends Component {
   private onoffinvent OpenExit;
   private Color White, Black, Transparent, BlueWhite;
   public ObjectFile drops;
-
+  private removeItem removedor;
+  
   void start() {
     White = new Color(255, 255, 255);
     Black = new Color(0, 0, 0);
     Transparent = new Color(0, 0, 0, 0);
     BlueWhite = new Color(0, 255, 255);
     
+    removedor = new removeItem();
     player = WorldController.findObject("player");
     Object = WorldController.findObject("object");
     paineldados = WorldController.findObject("information");
@@ -34,6 +36,10 @@ public class selectslot extends Component {
     if (clicktime < 5) clicktime += 0.01f;
     select();
     upslot();
+    
+    int valueDele = removedor.valueDele();
+    if (Input.isKeyDown("delAll") && select != -1) RemoveSlot(select, invent.slotAlmout[select]);
+    if (Input.isKeyDown("del") && select != -1) RemoveSlot(select,valueDele);
     if (Input.isKeyDown("invent") || Input.keyboard.isKeyDown("r")) {
       if (select > 4) select = -1;
       paineldados.setEnabled(false);
@@ -106,49 +112,48 @@ public class selectslot extends Component {
   private void upslot() {
     for (int i = 0; i < slot.length; i++) {
       if (keys.get(i).isDown() && OpenExit.onoff) {
-          if (contclick == i && clicktime < 0.1f) {
-            modvalue(trocaslot == i ? -1 : i);
-          } else {
-            contclick = i;
-            clicktime = 0;
-          }
-
-          if (slot[i] == null) continue;
-          if (trocaslot != -1 && trocaslot != i && trocaslot <= invent.items.size()) {
-            item watslot = invent.items.get(i);
-            item seleslot = invent.items.get(trocaslot);
-            if (watslot != null && seleslot != null && watslot.name != null && watslot.name.equals(seleslot.name)) {
-              int limita = watslot.maxgrup;
-              int space = limita - invent.slotAlmout[i];
-              // ele so ajunta quando o dois slot tenho quantidade pequena ele uni em um so
-              if (space > 0) {
-                int tranfere = Math.min(invent.slotAlmout[trocaslot], space);
-                invent.slotAlmout[i] += tranfere;
-                invent.slotAlmout[trocaslot] -= tranfere;
-                invent.cont[i].setText(invent.slotAlmout[i] > 0 ? String.valueOf(invent.slotAlmout[i]) : "");
-                invent.cont[trocaslot].setText(invent.slotAlmout[trocaslot] > 0 ? String.valueOf(invent.slotAlmout[trocaslot]) : "");
-                if (invent.slotAlmout[trocaslot] <= 0) {
-                  invent.items.set(trocaslot, null);
-                  invent.spait[trocaslot].setImage(Texture.empty());
-                  invent.spait[trocaslot].setColor(Transparent);
-                  invent.cont[trocaslot].setText("");
-                }
-              }
-            } else {
-              int watvalue = invent.slotAlmout[i];
-              int muditem = invent.slotAlmout[trocaslot];
-              invent.slotAlmout[trocaslot] = watvalue;
-              invent.slotAlmout[i] = muditem;
-              tocaslot(i, muditem, seleslot);
-              tocaslot(trocaslot, watvalue, watslot);
-            }
-            select = -1;
-            modvalue(-1);
-          }
-          break;
+        if (contclick == i && clicktime < 0.1f) {
+          modvalue(trocaslot == i ? -1 : i);
+        } else {
+          contclick = i;
+          clicktime = 0;
         }
-       
-      if (Input.isKeyDown("remove") && select == i) RemoveSlot(i);
+
+        if (slot[i] == null) continue;
+        if (trocaslot != -1 && trocaslot != i && trocaslot <= invent.items.size()) {
+          item watslot = invent.items.get(i);
+          item seleslot = invent.items.get(trocaslot);
+          if (watslot != null && seleslot != null && watslot.name != null && watslot.name.equals(seleslot.name)) {
+            int limita = watslot.maxgrup;
+            int space = limita - invent.slotAlmout[i];
+            // ele so ajunta quando o dois slot tenho quantidade pequena ele uni em um so
+            if (space > 0) {
+              int tranfere = Math.min(invent.slotAlmout[trocaslot], space);
+              invent.slotAlmout[i] += tranfere;
+              invent.slotAlmout[trocaslot] -= tranfere;
+              invent.cont[i].setText(invent.slotAlmout[i] > 0 ? String.valueOf(invent.slotAlmout[i]) : "");
+              invent.cont[trocaslot].setText(invent.slotAlmout[trocaslot] > 0 ? String.valueOf(invent.slotAlmout[trocaslot]) : "");
+              if (invent.slotAlmout[trocaslot] <= 0) {
+                invent.items.set(trocaslot, null);
+                invent.spait[trocaslot].setImage(Texture.empty());
+                invent.spait[trocaslot].setColor(Transparent);
+                invent.cont[trocaslot].setText("");
+              }
+            }
+          } else {
+            int watvalue = invent.slotAlmout[i];
+            int muditem = invent.slotAlmout[trocaslot];
+            invent.slotAlmout[trocaslot] = watvalue;
+            invent.slotAlmout[i] = muditem;
+            tocaslot(i, muditem, seleslot);
+            tocaslot(trocaslot, watvalue, watslot);
+          }
+          select = -1;
+          modvalue(-1);
+        }
+        break;
+      }
+
       if (trocaslot == i && invent.items.get(i) != null && invent.items.get(trocaslot) != null) {
         slot[i].setColor(BlueWhite);
       } else slot[i].setColor(select == i ? Black : White);
@@ -167,7 +172,7 @@ public class selectslot extends Component {
     //// troca ui e color
     if (invent.spait[i] != null) {
       invent.spait[i].setImage(seleslot != null && seleslot.ui != null ? seleslot.getSpait() : Texture.empty());
-      invent.spait[i].setColor(seleslot != null ? new Color() : new Color(0, 0, 0, 0));
+      invent.spait[i].setColor(seleslot != null ? White : Transparent);
     }
     ////
     // torca de valores
@@ -176,25 +181,29 @@ public class selectslot extends Component {
     }
   }
 
-  private void RemoveSlot(int i) {
+  private void RemoveSlot(int i, int quant) {
+    if (invent.cont[i] == null || invent.spait[i] == null) return;
     UseNoUse(false, i);
-    RemoveItem(i);
-    invent.items.set(i, null);
-    invent.slotAlmout[i] = 0;
-    if (invent.spait[i] != null) {
-      invent.spait[i].setImage(null);
+    int quantArmaz = invent.slotAlmout[i];
+    if (quant > quantArmaz) quant = quantArmaz;
+
+    invent.slotAlmout[i] -= quant;
+    RemoveItem(i, quant);
+    if (invent.slotAlmout[i] > 0) invent.cont[i].setText("" + invent.slotAlmout[i]);
+    else {
+      invent.items.set(i, null);
+      invent.spait[i].setImage(Texture.empty());
       invent.spait[i].setColor(Transparent);
+      invent.cont[i].setText("");
     }
-    if (invent.cont[i] != null) invent.cont[i].setText("");
     offonObj("", false, i);
     modvalue(-1);
-  }
+  } 
 
-  private void RemoveItem(int i) {
-    removeItem remove = new removeItem();
+  private void RemoveItem(int i, int quant) {
+   // removeItem remove = new removeItem();
     item rmItems = invent.items.get(i);
-    int quant = invent.slotAlmout[i];
     if (rmItems == null || quant <= 0) return;
-    remove.CaractItem(rmItems, quant, Object, drops);
+    removedor.CaractItem(rmItems, quant, Object, drops);
   }
 }
