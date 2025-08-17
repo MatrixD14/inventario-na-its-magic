@@ -54,7 +54,7 @@ public class invertore extends Component {
     onoff = true;
     if ((!Input.isKeyPressed("coleta") && !Input.keyboard.isKeyDown("e")) || time < 0.45f) return;
     for (int i = 0; i < (items.size() - 7); i++) {
-      if (items.get(i) == null || (items.get(i) != null && items.get(i).name.equals(objecthit.name))) {
+      if (items.get(i) == null || (items.get(i) != null && items.get(i).id == objecthit.id)) {
         int spaceVoid = objecthit.maxgrup - slotAlmout[i];
         if (spaceVoid >= objecthit.QuatItemGrup) {
           addItem(objecthit, i);
