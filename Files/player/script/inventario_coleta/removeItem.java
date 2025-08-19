@@ -1,5 +1,6 @@
 public class removeItem {
   private int values = 1;
+  private SUIText text = null;
 
   public void CaractItem(item rmItem, int value, SpatialObject objitem, ObjectFile drops) {
     if (rmItem == null || value <= 0) return;
@@ -22,18 +23,21 @@ public class removeItem {
       addDados.QuatItemGrup = value;
       values = 1;
     }
-    if (ItemType != null) ItemType.setModelFile(rmItem.vertex);
+    if (ItemType != null) {
+      ItemType.setModelFile(rmItem.vertex);
+      ItemType.setCastShadowEnabled(false);
+    }
     if (ItemCollider != null) {
       ItemCollider.setShape(4);
       ItemCollider.setVertexFile(rmItem.vertex);
     }
   }
 
-  public int valueDele() {
-    SUIText text = null;
+  public int valueDele(int valueMax) {
     if (text == null) text = WorldController.findObject("defQuatDelet").findChildObject("QuantD").findComponent("SUIText");
-    if (Input.isKeyDown("mais")) values++;
+    if (Input.isKeyDown("mais") && values < valueMax) values++;
     if (Input.isKeyDown("menos") && values > 1) values--;
+    if (Input.isKeyDown("remove")) values = 1;
     if (text != null) text.setText("" + values);
     return values;
   } 
