@@ -13,13 +13,13 @@ public class selectslot extends Component {
   private Color White, Black, Transparent, BlueWhite;
   public ObjectFile drops;
   private removeItem removedor;
-  
+
   void start() {
     White = new Color(255, 255, 255);
     Black = new Color(0, 0, 0);
     Transparent = new Color(0, 0, 0, 0);
     BlueWhite = new Color(0, 255, 255);
-    
+
     removedor = new removeItem();
     player = WorldController.findObject("player");
     Object = WorldController.findObject("object");
@@ -36,10 +36,13 @@ public class selectslot extends Component {
     if (clicktime < 5) clicktime += 0.01f;
     select();
     upslot();
-    
-    int valueDele = removedor.valueDele();
-    if (Input.isKeyDown("delAll") && select != -1) RemoveSlot(select, invent.slotAlmout[select]);
-    if (Input.isKeyDown("del") && select != -1) RemoveSlot(select,valueDele);
+
+    if (select != 1) {
+      int valueDele = removedor.valueDele(invent.slotAlmout[select]);
+      if (Input.isKeyDown("delAll")) RemoveSlot(select, invent.slotAlmout[select]);
+      if (Input.isKeyDown("del")) RemoveSlot(select, valueDele);
+    } 
+
     if (Input.isKeyDown("invent") || Input.keyboard.isKeyDown("r")) {
       if (select > 4) select = -1;
       paineldados.setEnabled(false);
@@ -188,7 +191,10 @@ public class selectslot extends Component {
     if (quant > quantArmaz) quant = quantArmaz;
 
     invent.slotAlmout[i] -= quant;
-    RemoveItem(i, quant);
+
+    item rmItems = invent.items.get(i);
+    if (rmItems != null) removedor.CaractItem(rmItems, quant, Object, drops);
+
     if (invent.slotAlmout[i] > 0) invent.cont[i].setText("" + invent.slotAlmout[i]);
     else {
       invent.items.set(i, null);
@@ -198,12 +204,5 @@ public class selectslot extends Component {
     }
     offonObj("", false, i);
     modvalue(-1);
-  } 
-
-  private void RemoveItem(int i, int quant) {
-   // removeItem remove = new removeItem();
-    item rmItems = invent.items.get(i);
-    if (rmItems == null || quant <= 0) return;
-    removedor.CaractItem(rmItems, quant, Object, drops);
   }
 }
