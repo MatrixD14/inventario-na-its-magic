@@ -12,9 +12,9 @@ public class CraftItem extends Component {
     ArrayList<item> Items =
         new ArrayList<item>() {
           {
-            add(new item("picareta", 9, "Minera", Sprite, obj[0], 5, 1, 1, 0, 0, null));
+            add(new item("picareta", 9, "Minera", Sprite, obj[0], 5, 1, 1, 0, 0, new arma(new picareta())));
             add(new item("espada", 10, "Dano", Sprite, obj[0], 10, 1, 1, 1, 0, new arma(new espada())));
-            add(new item("machado", 11, "Dano", Sprite, obj[0], 15, 1, 1, 2, 0, null));
+            add(new item("machado", 11, "Dano", Sprite, obj[0], 15, 1, 1, 2, 0, new arma(new machado())));
             add(new item("tocha", 8, "Luz", Sprite, obj[0], 10, 1, 64, 0, 1, new tocha()));
             add(new item("pão", 12, "Fome", Sprite, obj[1], 20, 1, 64, 1, 1, null));
             add(new item("tabua", 6, "Contrução", Sprite, obj[0], 20, 1, 64, 3, 2, null));
